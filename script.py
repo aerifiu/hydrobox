@@ -17,7 +17,7 @@ GPIO.setup(PUMP_OUT, GPIO.OUT)
 
 ### PARAMETERS ###
 DISTANCE = 7 #cm
-FILTER_LEN = 5 #items
+FILTER_LEN = 8 #items
 
 
 values = [0] * FILTER_LEN
@@ -71,14 +71,15 @@ if __name__ == '__main__':
         
             average = sum(values) / len(values)
             print ("Measured Distance = %.1f cm" % average)
+            #print (values)
             if average > DISTANCE:
                 GPIO.output(PUMP_OUT, True)
                 print("Pump is ON")
-                time.sleep(5)
+                time.sleep(10)
                 GPIO.output(PUMP_OUT, False)
                 print("Pump is OFF")
             else:
                 GPIO.output(PUMP_OUT, False)
-                time.sleep(0.5)
+                time.sleep(1)
     except Exception as e:
             print(str(e))

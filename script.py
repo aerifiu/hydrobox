@@ -14,6 +14,15 @@ GPIO.setup(GPIO_TRIGGER, GPIO.OUT)
 GPIO.setup(GPIO_ECHO, GPIO.IN)
 GPIO.setup(PUMP_OUT, GPIO.OUT)
 
+
+### PARAMETERS ###
+DISTANCE = 7 #cm
+FILTER_LEN = 5 #items
+
+
+values = [0] * FILTER_LEN
+pos = 0
+
 def distance():
     # set Trigger to HIGH
     GPIO.output(GPIO_TRIGGER, True)
@@ -55,14 +64,21 @@ if __name__ == '__main__':
     try:
         while True:
             dist = distance()
-            print ("Measured Distance = %.1f cm" % dist)
-            time.sleep(0.5)
-            if dist > 6:
+            values[pos] = dist
+            pos += 1
+            if pos >= FILTER_LEN:
+                pos = 0
+        
+            average = sum(values) / len(values)
+            print ("Measured Distance = %.1f cm" % average)
+            if average > DISTANCE:
                 GPIO.output(PUMP_OUT, True)
                 print("Pump is ON")
-                time.sleep(3)
+                time.sleep(5)
+                GPIO.output(PUMP_OUT, False)
+                print("Pump is OFF")
             else:
                 GPIO.output(PUMP_OUT, False)
-                time.sleep(1)
+                time.sleep(0.5)
     except Exception as e:
             print(str(e))

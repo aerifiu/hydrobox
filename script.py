@@ -81,5 +81,6 @@ if __name__ == '__main__':
             else:
                 GPIO.output(PUMP_OUT, False)
                 time.sleep(1)
-    except Exception as e:
-            print(str(e))
+    except KeyboardInterrupt:
+        print("Measurement stopped by User")
+        GPIO.cleanup()

@@ -1,0 +1,1 @@
+python -u /home/pi/code/script.py > /home/pi/code/log.txt &
